@@ -1,13 +1,35 @@
 <?php
 
-// Vérifie 'nom', 'prenom' et 'age' définis.
+// Vérifie si'nom', 'prenom' et 'age' son complete.
 if (isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['age'])) {
-    $nom = htmlspecialchars($_POST['nom']);       // Protège contre les attaques XSS
-    $prenom = htmlspecialchars($_POST['prenom']); // Récupération et protection du prénom
-    $age = (int) $_POST['age'];                   // S'assure que l'âge est un entier
+    $nom = htmlspecialchars($_POST['nom']);
+    $prenom = htmlspecialchars($_POST['prenom']);
+    $age = (int) $_POST['age'];
 
-    // Affiche l'info majeure ou non
+    // Détermine majeur ou non
     $statutMajorite = ($age >= 18) ? "vous êtes majeur(e)." : "vous êtes mineur(e).";
+
+    //Sauvegarde des données dans un fichier JSON
+
+    $userData = [
+        'nom' => $nom,
+        'prenom' => $prenom,
+        'age' => $age,
+        'statutMajorite' => $statutMajorite
+    ];
+
+    $filename = 'data_' . strtolower($prenom) . '_' . strtolower($nom) . '.json';
+    $filepath = __DIR__ . '/data/' . $filename; // Stocke dans 'data'
+
+    if (!is_dir(__DIR__ . '/data')) {
+        mkdir(__DIR__ . '/data', 0777, true); // Crée le répertoire
+    }
+
+    // Sauvegarde les données de l'utilisateur sous forme de JSON dans le fichier
+    if (file_put_contents($filepath, json_encode($userData))) {
+    } else {
+        error_log("Erreur lors de la sauvegarde des données pour l'utilisateur : " . $prenom . " " . $nom);
+    }
 
     echo "<!DOCTYPE html>";
     echo "<html>";
@@ -28,7 +50,7 @@ if (isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['age'])) {
     echo "            border: none;";
     echo "            border-radius: 4px;";
     echo "            text-decoration: none;"; /* Retire le soulignement */
-    echo "            cursor: pointer;"; 
+    echo "            cursor: pointer;";
     echo "            font-size: 16px;";
     echo "            margin-top: 20px;";
     echo "        }";
@@ -37,26 +59,29 @@ if (isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['age'])) {
     echo "            font-size: 18px;";
     echo "        }";
     echo "    </style>";
-    echo "    </head>;
+    echo "</head>";
 
-              <body>";
+    echo "<body>";
     echo "    <h1>Bonjour, ".$prenom." ".$nom.".</h1>";
     echo "    <p>Tu as ".$age." ans.</p>";
 
-    // Vérifie  si vous êtes majeur ou pas
+    // Vérifie si vous êtes majeur ou pas
     echo "<p class='";
     echo ($age >= 18) ? "major" : "mineur";
     echo "'>En France, " . $statutMajorite . "</p>";
 
-    // URL de "retour au formulaire"
+    // Lien pour "retour au formulaire"
     echo "    <a href='https://expert-space-waffle-pj6wwg7p455pc7xj-443.app.github.dev/docs' class='button'>Retour au formulaire</a>";
+    // Nouveau lien pour "Voir mes données stockées"
+    echo "    <a href='index.php?view_data=" . urlencode($filename) . "' class='button'>Voir mes données stockées</a>";
+
 
     echo "</body>";
     echo "</html>";
 
 } else {
-    // Si quelqu'un tente d'accéder directement à action.php sans remplire le formulaire, ou si les données sont manquantes
+    // Si quelqu'un tente d'accéder directement à action.php sans remplir le formulaire, ou si les données sont manquantes
     header('Location: https://expert-space-waffle-pj6wwg7p455pc7xj-443.app.github.dev/docs');
-    exit; // STOP le script après la redirection
+    exit; // Arrête le script après la redirection
 }
 ?>
