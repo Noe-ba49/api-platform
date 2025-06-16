@@ -8,7 +8,6 @@ if (isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['age'])) {
 
     // Affiche l'info majeure ou non
     $statutMajorite = ($age >= 18) ? "vous êtes majeur(e)." : "vous êtes mineur(e).";
-    
 
     echo "<!DOCTYPE html>";
     echo "<html>";

@@ -1,17 +1,10 @@
 <?php
-// Ceci est le fichier principal que l'utilisateur doit visiter dans son navigateur.
-
-// Vérifie si les données 'nom', 'prenom' et 'age' ont été soumises via la méthode POST.
-// Le champ 'prenom' est ajouté à la condition.
+// Vérifie si les données 'nom', 'prenom' et 'age'.
 if (isset($_POST['nom']) && isset($_POST['prenom']) && isset($_POST['age'])) {
-    // Si les données sont présentes, cela signifie que le formulaire a été soumis.
-    // Nous incluons alors le fichier 'action.php' qui contient le message de salutation.
+    // Si les données sont présentes,inclusion du fichier 'action.php'.
     include 'action.php';
 } else {
-    // Si les données ne sont PAS présentes dans $_POST,
-    // cela signifie que la page est chargée pour la première fois
-    // ou que le formulaire n'a pas encore été soumis.
-    // Dans ce cas, nous affichons le formulaire HTML avec le nouveau champ 'prenom'.
+    // Si les données ne sont PAS présentes, le formulaire n'a pas encore été soumis affichage du formulaire HTML
 ?>
 <!DOCTYPE html>
 <html>
